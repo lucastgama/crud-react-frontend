@@ -36,9 +36,9 @@ export default class UserCrud extends Component {
     });
   }
 
-  getUpdateList(user) {
+  getUpdateList(user, add = true) {
     const list = this.state.list.filter((u) => u.id !== user.id);
-    list.unshift(user);
+    if (add) list.unshift(user);
     return list;
   }
   updateField(event) {
@@ -52,8 +52,8 @@ export default class UserCrud extends Component {
   }
 
   remove(user) {
-    axios.delete(`/${user.id}`).then((resp) => {
-      const list = this.state.list.filter((u) => u.id !== user.id);
+    axios.delete(`${baseURL}/${user.id}`).then((resp) => {
+      const list = this.getUpdateList(user, false);
       this.setState({ list });
     });
   }
@@ -68,7 +68,7 @@ export default class UserCrud extends Component {
             <th>Ações</th>
           </tr>
         </thead>
-        <tbody>{this.renderRow()}</tbody>
+        <tbody>{this.renderRows()}</tbody>
       </table>
     );
   }
@@ -84,7 +84,7 @@ export default class UserCrud extends Component {
               <i className="fa fa-pencil"></i>
             </button>
             <button
-              className="btn btn-danger ml-2"
+              className="btn btn-danger ms-2"
               onClick={() => this.remove(user)}
             >
               <i className="fa fa-trash"></i>
@@ -130,13 +130,13 @@ export default class UserCrud extends Component {
         <div className="row">
           <div className="col-12 d-flex justify-content-end">
             <button
-              className="btn btn-primary ml-2"
+              className="btn btn-primary ms-2"
               onClick={(e) => this.save(e)}
             >
               Salvar
             </button>
             <button
-              className="btn btn-secondary ml-2"
+              className="btn btn-secondary ms-2"
               onClick={(e) => this.clear(e)}
             >
               Cancelar
